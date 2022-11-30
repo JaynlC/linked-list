@@ -2,7 +2,7 @@ class LinkedList
 
   def initialize()
     @head = nil
-    puts 'Linked list has no nodes! Use push(value), or listed methods in README to start using linked-lists!'
+    puts 'Linked list has no nodes! Use listed methods in README to start using linked-lists!'
   end
 
   def push(value)
@@ -16,6 +16,7 @@ class LinkedList
       end
       current_node.next_node = new_node
     end
+    self
   end
 
   def prepend(value)
@@ -27,6 +28,7 @@ class LinkedList
       @head = new_node
       @head.next_node = old_head
     end
+    self
   end
 
   def size
@@ -42,10 +44,12 @@ class LinkedList
       end
       puts "Size is #{list_size}"
     end
+    list_size
   end
   
   def head
     puts "First Node data: #{@head.data}"
+    @head
   end
 
   def tail
@@ -54,11 +58,13 @@ class LinkedList
       current_node = current_node.next_node
     end
     puts "Last Node data: #{current_node.data}"
+    current_node
   end
 
   def at(index)
     if index == 0
       puts "Node at index of #{index} is 0"
+      @head
     else
       current_node = @head
       node_count = 0
@@ -71,6 +77,7 @@ class LinkedList
         puts "Input Index argument of #{index} is greater than number of nodes (#{node_count}) in list."
       else
         puts "Node at index of #{index} is: #{current_node.data}"
+        current_node
       end
     end
   end
@@ -82,7 +89,7 @@ class LinkedList
     end
     p current_node
     current_node.next_node = nil
-    self #checkmethod
+    self
   end
 
   def contains?(value)
@@ -134,7 +141,41 @@ class LinkedList
   end
 
   def insert_at(value, index)
-    # resume here
+    if index > self.size
+      puts "Error. Index = #{index} which is larger than list size equal to #{self.size}. Enter smaller index than list size."
+    elsif index < 0
+      puts "Error. Please enter index > 0"
+    else
+      new_node = Node.new
+      new_node.data = value
+      current_node_at_index = self.at(index)
+      previous_node = self.at(index - 1)
+      if current_node_at_index.next_node == nil
+        self.push(value)
+      elsif index.zero?
+        self.prepend(value)
+      else
+        previous_node.next_node = new_node
+        new_node.next_node = current_node_at_index
+      end
+      self.to_s
+    end
+  end
+
+  def remove_at(index)
+    if index > self.size
+      puts "Error. Index = #{index} which is larger than list size equal to #{self.size}. Enter smaller index than list size."
+    elsif index < 0
+      puts "Error. Please enter index > 0"
+    elsif index.zero?
+      @head = self.at(1)
+      self
+    else
+      previous_node = self.at(index - 1)
+      node_ahead = self.at(index + 1)
+      previous_node.next_node = node_ahead
+      self
+    end
   end
 end
 
@@ -148,5 +189,10 @@ class Node
 end
 
 list = LinkedList.new
-list.push(2)
-list.prepend(1)
+# Tests:
+# list.push("I'm last...")
+# list.prepend("I'm first!")
+# list.insert_at("Now I am First!", 0)
+# list.insert_at("Check Check", 1)
+# list.remove_at(1)
+# list.remove_at(0)
